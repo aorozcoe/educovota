@@ -39,14 +39,11 @@ RUN composer dump-autoload --optimize --no-scripts
 # Build frontend assets
 RUN npm run build
 
+# Copy entrypoint script
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
 # Expose port
 EXPOSE ${PORT:-8080}
 
-# Start: link storage, cache config, run migrations, then serve
-CMD php artisan storage:link --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    php artisan migrate --force && \
-    php artisan db:seed --force && \
-    php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+CMD ["/app/docker-entrypoint.sh"]
