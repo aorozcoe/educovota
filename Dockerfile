@@ -23,6 +23,16 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
+# Create required Laravel directories
+RUN mkdir -p storage/framework/sessions \
+    storage/framework/views \
+    storage/framework/cache \
+    storage/logs \
+    bootstrap/cache
+
+# Set permissions
+RUN chmod -R 775 storage bootstrap/cache
+
 # Dump autoload without running scripts (avoid DB connections during build)
 RUN composer dump-autoload --optimize --no-scripts
 
@@ -32,5 +42,10 @@ RUN npm run build
 # Expose port
 EXPOSE ${PORT:-8080}
 
-# Start the application
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+# Start: link storage, cache config, run migrations, then serve
+CMD php artisan storage:link --force && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache && \
+    php artisan migrate --force && \
+    php artisan serve --host=0.0.0.0 --port=${PORT:-8080}

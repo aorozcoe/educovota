@@ -26,8 +26,12 @@ class AppPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         $config = null;
-		if (Schema::hasTable('configuraciones')) {
-			$config = Configuracion::first();
+		try {
+			if (Schema::hasTable('configuraciones')) {
+				$config = Configuracion::first();
+			}
+		} catch (\Exception $e) {
+			// Database not available yet
 		}
         
         return $panel
