@@ -16,7 +16,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-use APP\Filament\App\Pages\LoginEstudiante;
+use App\Filament\App\Pages\LoginEstudiante;
 use App\Filament\App\Pages\Votar;
 use App\Models\Configuracion;
 use Illuminate\Support\Facades\Schema;

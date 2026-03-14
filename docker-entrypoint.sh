@@ -1,10 +1,18 @@
 #!/bin/bash
 set -e
 
+# Set Railway's dynamic PORT in nginx config (default 8080)
+sed -i "s|listen 8080|listen ${PORT:-8080}|g" /etc/nginx/sites-enabled/default
+
+# Create storage link
 php artisan storage:link --force
+
+# Cache configuration
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+
+# Run migrations
 php artisan migrate --force
 
 # Create admin user if it doesn't exist
@@ -36,4 +44,11 @@ if (\Illuminate\Support\Facades\Schema::hasTable('grados') && \DB::table('grados
 }
 "
 
-php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+# Ensure correct permissions for runtime
+chown -R www-data:www-data /app/storage /app/bootstrap/cache
+
+# Create php-fpm socket directory
+mkdir -p /run
+
+# Start supervisor (manages nginx + php-fpm)
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

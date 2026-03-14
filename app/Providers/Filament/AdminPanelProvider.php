@@ -21,7 +21,7 @@ use App\Models\Configuracion;
 use Illuminate\Support\Facades\Schema;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
-use App\Filament\App\Pages\LoginAdmin;
+use App\Filament\Pages\LoginAdmin;
 
 
 class AdminPanelProvider extends PanelProvider
