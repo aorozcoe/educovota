@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\App\Pages;
+namespace App\Filament\Auth;
 
 use App\Models\Configuracion;
 use App\Models\Voto;
