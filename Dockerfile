@@ -23,8 +23,8 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
-# Run composer scripts
-RUN composer dump-autoload --optimize
+# Dump autoload without running scripts (avoid DB connections during build)
+RUN composer dump-autoload --optimize --no-scripts
 
 # Build frontend assets
 RUN npm run build
